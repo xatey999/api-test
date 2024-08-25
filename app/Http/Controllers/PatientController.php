@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PatientFormValidationRequest;
+use App\Models\Department;
+use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,8 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        $query = Doctor::with('department')->get();
+        return response()->json($query, 200);
     }
 
     /**

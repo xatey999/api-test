@@ -19,6 +19,7 @@ Route::post('/doctor/store',[DoctorController::class,'store'])->middleware(['aut
 
 //patient routes:
 Route::post('/patient-form',[PatientController::class,'store'])->middleware(['auth:sanctum']);
+Route::get('doctor-list',[PatientController::class,'index'])->middleware(['auth:sanctum']);
 require __DIR__.'/auth.php';
 
 //for login
