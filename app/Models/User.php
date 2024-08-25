@@ -48,10 +48,10 @@ class User extends Authenticatable
     }
 
     public function patient() {
-        return $this->hasOne(Patient::class, 'user_id');
+        return $this->hasOne(Patient::class);
     }
 
-    public function doctors() {
-        return $this->hasOne(Doctor::class, 'user_id');
+    public function doctor() {
+        return $this->hasOne(Doctor::class);
     }
 }
