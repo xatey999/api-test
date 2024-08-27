@@ -33,7 +33,7 @@ class PatientController extends Controller
      */
     public function store(PatientFormValidationRequest $request)
     {
-        // Check if the authenticated user already has a doctor record
+        // Check if the authenticated user is already a patient recorded
     $existingPatient = Patient::where('user_id', Auth::user()->id)->first();
 
     if ($existingPatient) {
