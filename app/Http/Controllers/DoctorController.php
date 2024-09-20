@@ -21,7 +21,7 @@ class DoctorController extends Controller
 
     /**
  * @OA\Post(
- *     path="/api/doctor/store",
+ *     path="/doctor/store",
  *     summary="Store a newly created doctor's information",
  *     description="Store a doctor's information and return the stored data along with a success message",
  *     tags={"Doctors"},

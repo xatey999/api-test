@@ -35,7 +35,7 @@
                                 "properties": {
                                     "email": {
                                         "type": "string",
-                                        "example": "user@example.com"
+                                        "example": "ujjwal@gmail.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -139,14 +139,14 @@
                 }
             }
         },
-        "/api/doctor/store": {
+        "/doctor/store": {
             "post": {
                 "tags": [
                     "Doctors"
                 ],
                 "summary": "Store a newly created doctor's information",
                 "description": "Store a doctor's information and return the stored data along with a success message",
-                "operationId": "619b998973500b4557b4a71fb59e65f3",
+                "operationId": "96def4a2d4f11c8823f3beac2a1f8e43",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -316,9 +316,463 @@
                     }
                 ]
             }
+        },
+        "/schedules": {
+            "get": {
+                "tags": [
+                    "Schedules"
+                ],
+                "summary": "Get all the schedule list of the current doctor",
+                "operationId": "66e486a11c0890278f5328be62bce51e",
+                "responses": {
+                    "200": {
+                        "description": "A specific schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Schedules"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Schedules"
+                ],
+                "summary": "Store a newly created schedule for a doctor",
+                "description": "Store a doctor's schedule and return the stored data along with a success message",
+                "operationId": "9a8fc6c84a98c5fad3940068fce37f8e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "day",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "day": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Sunday",
+                                            "Monday",
+                                            "Tuesday",
+                                            "Wednesday",
+                                            "Thursday",
+                                            "Friday",
+                                            "Saturday"
+                                        ],
+                                        "example": "Monday"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "06:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "07:30"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Schedule created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "schedule": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "doctor_id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "day": {
+                                                    "type": "string",
+                                                    "example": "Monday"
+                                                },
+                                                "start_time": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "example": "09:00:00"
+                                                },
+                                                "end_time": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "example": "17:00:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Schedule created successfully"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "success"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "day": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The day field is required."
+                                                    }
+                                                },
+                                                "start_time": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The start_time field is required."
+                                                    }
+                                                },
+                                                "end_time": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The end_time field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/schedules/{id}": {
+            "put": {
+                "tags": [
+                    "Schedules"
+                ],
+                "summary": "Update a specific schedule",
+                "description": "Update details of a specific schedule by ID.",
+                "operationId": "9f1b60fd5b17d4c7e5f1df73ddd5c02c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "week_day",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "day": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Sunday",
+                                            "Monday",
+                                            "Tuesday",
+                                            "Wednesday",
+                                            "Thursday",
+                                            "Friday",
+                                            "Saturday"
+                                        ],
+                                        "example": "Monday"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "09:00:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "17:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Schedule successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Schedule Updated"
+                                        },
+                                        "schedule": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "doctor_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "day": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "Sunday",
+                                                        "Monday",
+                                                        "Tuesday",
+                                                        "Wednesday",
+                                                        "Thursday",
+                                                        "Friday",
+                                                        "Saturday"
+                                                    ],
+                                                    "example": "Monday"
+                                                },
+                                                "start_time": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "example": "09:00:00"
+                                                },
+                                                "end_time": {
+                                                    "type": "string",
+                                                    "format": "time",
+                                                    "example": "17:00:00"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-08-29T00:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-08-29T00:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized to update with your role"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Schedule not found"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "day": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected week_day is invalid."
+                                                    }
+                                                },
+                                                "start_time": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The start_time field is required and must be a valid time."
+                                                    }
+                                                },
+                                                "end_time": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The end_time field is required and must be a valid time."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Schedules"
+                ],
+                "summary": "Delete a specific schedule",
+                "operationId": "0ecfded55ace08cb3a917fd20b19f6ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
+        "schemas": {
+            "Schedules": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "day": {
+                        "type": "string",
+                        "example": "Monday"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "09:00:00"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "17:00:00"
+                    },
+                    "doctor_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-08-27T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-08-27T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
@@ -336,6 +790,10 @@
         {
             "name": "Doctors",
             "description": "Doctors"
+        },
+        {
+            "name": "Schedules",
+            "description": "Schedules"
         }
     ]
 }
